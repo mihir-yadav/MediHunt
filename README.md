@@ -1,2 +1,2 @@
 # Medi_Hunt
-Searches Medicine on various wesites and displays the compiled results.
+Searches required medicine on various pharmacies' websites and displays the compiled results.

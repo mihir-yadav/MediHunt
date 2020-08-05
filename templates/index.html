@@ -8,28 +8,24 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css" integrity="sha384-VCmXjywReHh4PwowAiWNagnWcLhlEJLA5buUprzK8rxFgeH0kww/aWY76TfkUoSX" crossorigin="anonymous">
 
-    <title>Hello, world!</title>
+    <title>MediHunt</title>
   </head>
   <body>
     <h1>Welcome to Medi Hunt !</h1>
-    <form action="{{url_for('handle_data')}}" method='POST'>
+    <form action="{{url_for('handle_data')}}" method='POST' >
       <label for="type_of_medicine">Choose the type of medicine </label>
-      <select id="type_of_medicine" name="type_of_medcine">
+      <select id="type_of_medicine" name = "po">
       <option value="tablet">Tablet</option>
       <option value="syrup">Syrup</option>
       <option value="lotion">Lotion</option>
       <option value="injection">Injection</option>
+      <option value="Capsule">Capsule and others</option>
       </select>
-      <br>
-
+      <!-- <hr> -->
       <label for = "name"> Medicine name </label>
-      <input id="name" type="text" placeholder="enter name here"/>
+      <input id="name" type="text" name = "po" placeholder="enter name here"/>
 
-      <label for = "qty"> Medicine quantity </label>
-      <input id="qty" type="text" placeholder="enter amount here"/>
-
-
-      <input type="submit" name = "hunt!" placeholder="placeholder" />
+      <input type="submit" value = "hunt! "name = "hunt!" placeholder="hunt!" />
       
 
     </form> 

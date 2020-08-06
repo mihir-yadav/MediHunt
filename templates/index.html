@@ -11,28 +11,24 @@
     <title>Hello, world!</title>
   </head>
   <body>
-    <h1>Welcome to Medi Hunt !</h1>
-    <form action="{{url_for('handle_data')}}" method='POST'>
-      <label for="type_of_medicine">Choose the type of medicine </label>
-      <select id="type_of_medicine" name="type_of_medcine">
-      <option value="tablet">Tablet</option>
-      <option value="syrup">Syrup</option>
-      <option value="lotion">Lotion</option>
-      <option value="injection">Injection</option>
-      </select>
-      <br>
-
-      <label for = "name"> Medicine name </label>
-      <input id="name" type="text" placeholder="enter name here"/>
-
-      <label for = "qty"> Medicine quantity </label>
-      <input id="qty" type="text" placeholder="enter amount here"/>
-
-
-      <input type="submit" name = "hunt!" placeholder="placeholder" />
-      
-
+    <h1 class="h1 p-3 text-primary">Welcome to MediHunt</h1>
+    <form action="{{ url_for('handle_data') }}" method='POST'>
+      <div class="form-group d-flex mx-auto p-3">
+        <select id="type_of_medicine" name="type_of_medcine" class="form-control w-auto border border-primary">
+          <option value="tablet" class="form-control">Tablet</option>
+          <option value="syrup" class="form-control">Syrup</option>
+          <option value="lotion" class="form-control">Lotion</option>
+          <option value="injection" class="form-control">Injection</option>
+          <option value="capsule" class="form-control">Capsule</option>
+          <option value="other" class="form-control">Other</option>
+        </select>
+        <div class="col-6">
+          <input id="name" name="name" type="text" class="form-control border border-primary" placeholder="Medicine Name and Other Details"/>
+        </div>
+        <input type="submit" name = "hunt" value="Hunt!!" class="form-control w-auto btn btn-primary"/>
+      </div>
     </form> 
+
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

@@ -30,7 +30,7 @@ def index(data = None):
 @app.route('/handle_data', methods = ['POST'])
 def handle_data():
 	data = backend.compileData([request.form['type'], request.form['name']])
-	src = backend.get_img_src(' '.join(request.form['name']))
+	src = backend.get_img_src([request.form['type'], request.form['name']])
 	return flask.render_template('index.html', data=[data,src])
 
 def getDriver():

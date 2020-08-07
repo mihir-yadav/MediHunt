@@ -1,4 +1,4 @@
-from flaskRun import getDriver
+from flaskRun import getDriver, quitDriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
@@ -8,7 +8,7 @@ from selenium.webdriver.common.keys import Keys
 
 def get_img_src(medicine):
 	driver= getDriver()
-	driver.get('https://images.google.com');
+	driver.get('https://images.google.com')
 	driver.find_element_by_xpath('//*[@id="sbtc"]/div/div[2]/input').send_keys(medicine)
 	driver.find_element_by_xpath('//*[@id="sbtc"]/div/div[2]/input').send_keys(Keys.ENTER)
 	src = driver.find_element_by_xpath('//*[@id="islrg"]/div[1]/div[1]/a[1]/div[1]/img').get_attribute('src')
@@ -83,7 +83,9 @@ def f_1mg(medicine):
 						# 
 						# +'\n'+ box.find_element_by_class_name('_36aef').text
 						# try :
-						data_obj['price'] = box.find_element_by_class_name('style__price-tag___KzOkY').text
+						price = box.find_element_by_class_name('style__price-tag___KzOkY').text
+						price = str(price)
+						data_obj['price'] = price.replace('MRP', '')
 						# except : 
 						# 	data_obj['price'] = box.find_element_by_class_name('nFRb7').text 
 				
@@ -197,7 +199,6 @@ def f_apollo(medicine):
 	return data
 
 def f_netmeds(medicine):
-	pass
 	URL = "https://www.netmeds.com/"
 	driver = getDriver()
 	driver.get(URL)
@@ -210,7 +211,7 @@ def f_netmeds(medicine):
 			'price': ''
 		}
 	] * 5
-	# return data
+	
 	try:
 		driver.find_element_by_id('search').send_keys(' '.join(medicine))
 		driver.find_element_by_id('search').send_keys(Keys.ENTER)
@@ -255,4 +256,5 @@ def compileData(medicine):
 			'netmeds': netmeds[i],
 			'onemg': onemg[i]
 		}
+	quitDriver()
 	return data

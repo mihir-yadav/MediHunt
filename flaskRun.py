@@ -29,9 +29,11 @@ def index(data = None):
 
 @app.route('/handle_data', methods = ['POST'])
 def handle_data():
+	global driver
 	data = backend.compileData([request.form['type'], request.form['name']])
+	searched_text = request.form['name']
 	src = backend.get_img_src(' '.join(request.form['name']))
-	return flask.render_template('index.html', data=[data,src])
+	return flask.render_template('index.html', data=data, src=src, search=searched_text)
 
 def getDriver():
 	global driver
@@ -40,13 +42,19 @@ def getDriver():
 	assert driver is not None
 	return driver
 
+def quitDriver():
+	global driver
+	if driver:
+		driver.quit()
+		driver = None
+
 def initDriver():
 	global driver
 	options = webdriver.ChromeOptions()
 	options.add_argument('--ignore-certificate-errors')
 	options.add_argument('--incognito')
 	options.add_argument('--headless')
-	driver = webdriver.Chrome(MIHIR_WEBDRIVER, chrome_options=options)
+	driver = webdriver.Chrome(ANKUR_WEBDRIVER, chrome_options=options)
 
 if __name__ == '__main__':
 	app.debug=True

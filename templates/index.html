@@ -23,17 +23,21 @@
           <option value="other" class="form-control">Other</option>
         </select>
         <div class="col-6">
+          {% if search %}
+            <input id="name" name="name" type="text" class="form-control border border-primary" placeholder="Medicine Name and Other Details" value="{{ search }}"/>
+          {% else %}
           <input id="name" name="name" type="text" class="form-control border border-primary" placeholder="Medicine Name and Other Details"/>
+          {% endif %}
         </div>
-        <input type="submit" name = "hunt" value="Hunt!!" class="form-control w-auto btn btn-primary"/>
-      {% if data %}
-      <img class = 'img-responsive' src = {{data[1]}} alt = 'Medicine_Image' style = 'float:right'>
-
-
+        <input type="submit" name = "hunt" value="Hunt" class="form-control w-auto btn btn-primary"/>
       </div>
     </form> 
 
+    {% if src %}
+      <img class = 'img-responsive img-thumbnail' src = "{{ src }}" alt = 'Medicine_Image' style="display: block; margin-left: auto; margin-right: auto; width: 200px; height: 200px">
+    {% endif %}
 
+    {% if data %}
     <table class = "table table-bordered">
       <tr class="d-flex w-auto">
         <th class="col w-auto">
@@ -50,7 +54,7 @@
         </th>
       </tr>
     
-      {% for dataObj in data[0] %}
+      {% for dataObj in data %}
       <tr class="d-flex w-auto">
         <td class="col w-auto">
           <a href="{{ dataObj.apollo.link }}" target="_blank">

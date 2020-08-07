@@ -68,6 +68,11 @@ def f_apollo(medicine):
     return data
 
 def f_netmeds(medicine):
+    URL = "https://www.netmeds.com/"
+    driver = getDriver()
+    driver.get(URL)
+    delay = 4
+
     data = [
         {
             'link': '#',
@@ -75,6 +80,35 @@ def f_netmeds(medicine):
             'price': ''
         }
     ] * 5
+
+    try:
+        driver.find_element_by_id('search').send_keys(' '.join(medicine))
+        driver.find_element_by_id('search').send_keys(Keys.ENTER)
+
+        try:
+            WebDriverWait(driver, delay).until(EC.presence_of_element_located(
+                (By.CLASS_NAME, 'sear-name')
+            ))
+
+            boxes = driver.find_elements_by_class_name('drug_list')
+
+            for i, box in enumerate(boxes):
+                data_obj = {
+                    'link': '#',
+                    'name': '',
+                    'price': ''
+                }
+                obj = box.find_element_by_class_name('drug_c').find_element_by_tag_name('a')
+                data_obj['link'] = obj.get_attribute('href')
+                data_obj['name'] = obj.find_element_by_class_name('info').text
+                data_obj['price'] = box.find_element_by_class_name('final-price').text
+                data[i] = data_obj
+        except:
+            pass
+    except:
+        pass
+    
+    print(data)
     return data
 
 def compileData(medicine):

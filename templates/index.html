@@ -14,7 +14,11 @@
     <h1 class="h1 p-3 text-primary">Welcome to MediHunt</h1>
     <form action="{{ url_for('handle_data') }}" method='POST'>
       <div class="form-group d-flex mx-auto p-3">
+<<<<<<< HEAD
         <select id="name" name="name" class="form-control w-auto border border-primary">
+=======
+        <select id="type_of_medicine" name="type" class="form-control w-auto border border-primary">
+>>>>>>> fbbb945bb9f512bbc16f466695688c8996c630dd
           <option value="tablet" class="form-control">Tablet</option>
           <option value="syrup" class="form-control">Syrup</option>
           <option value="lotion" class="form-control">Lotion</option>
@@ -29,6 +33,77 @@
       </div>
     </form> 
 
+    {% if data %}
+    <table class = "table table-bordered">
+      <tr class="d-flex w-auto">
+        <th class="col w-auto">
+          Apollo Pharmacy
+        </th>
+        <th class="col w-auto">
+          Pharmeasy
+        </th>
+        <th class="col w-auto">
+          Netmeds
+        </th>
+        <th class="col w-auto">
+          1mg
+        </th>
+      </tr>
+    
+      {% for dataObj in data %}
+      <tr class="d-flex w-auto">
+        <td class="col w-auto">
+          <a href="{{ dataObj.apollo.link }}" target="_blank">
+            <div class="d-flex">
+              <div class="col-8">
+                {{ dataObj.apollo.name }}
+              </div>
+              <div class="col-4">
+                {{ dataObj.apollo.price }}
+              </div>
+            </div>
+          </a>
+        </td>
+        <td class="col w-auto">
+          <a href="{{ dataObj.pharmeasy.link }}" target="_blank">
+            <div class="d-flex">
+              <div class="col-8">
+                {{ dataObj.pharmeasy.name }}
+              </div>
+              <div class="col-4">
+                {{ dataObj.pharmeasy.price }}
+              </div>
+            </div>
+          </a>
+        </td>
+        <td class="col w-auto">
+          <a href="{{ dataObj.netmeds.link }}" target="_blank">
+            <div class="d-flex">
+              <div class="col-8">
+                {{ dataObj.netmeds.name }}
+              </div>
+              <div class="col-4">
+                {{ dataObj.netmeds.price }}
+              </div>
+            </div>
+          </a>
+        </td>
+        <td class="col w-auto">
+          <a href="{{ dataObj.onemg.link }}" target="_blank">
+            <div class="d-flex">
+              <div class="col-8">
+                {{ dataObj.onemg.name }}
+              </div>
+              <div class="col-4">
+                {{ dataObj.onemg.price }}
+              </div>
+            </div>
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% endif %}
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

@@ -28,7 +28,8 @@ def index(data = None):
 
 @app.route('/handle_data', methods = ['POST'])
 def handle_data():
-	return flask.render_template('index.html', data=sample_data)
+	data = backend.compileData([request.form['type'], request.form['name']])
+	return flask.render_template('index.html', data=data)
 
 def getDriver():
 	global driver

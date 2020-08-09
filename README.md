@@ -7,3 +7,6 @@ To install:
 2. pip install selenium
 3. git clone "https://github.com/mihir-yadav/Medi_Hunt"
 4. python3 flaskRun.py
+
+![Image of Website]
+(https://github.com/mihir-yadav/Medi_Hunt/blob/master/Demo/MediHunt.png)

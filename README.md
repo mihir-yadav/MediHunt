@@ -9,4 +9,4 @@ To install:
 4. python3 flaskRun.py
 
 ![Image of Website]
-(https://github.com/mihir-yadav/Medi_Hunt/blob/master/Demo/MediHunt.png)
+(Demo/MediHunt.png)

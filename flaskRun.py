@@ -29,8 +29,9 @@ def index(data = None):
 
 @app.route('/handle_data', methods = ['POST'])
 def handle_data():
-	data = backend.compileData([request.form['type'], request.form['name']])
-	src = backend.get_img_src([request.form['type'], request.form['name']])
+	Medicine = [request.form['type'], request.form['name']]
+	data = backend.compileData(Medicine)
+	src = backend.get_img_src(Medicine)
 	return flask.render_template('index.html', data=[data,src])
 
 def getDriver():

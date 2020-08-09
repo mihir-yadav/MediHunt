@@ -7,7 +7,7 @@ from selenium.webdriver.common.keys import Keys
 
 
 def get_img_src(medicine):
-	driver= getDriver()
+	driver = getDriver()
 	driver.get('https://images.google.com');
 	driver.find_element_by_xpath('//*[@id="sbtc"]/div/div[2]/input').send_keys(' '.join(medicine))
 	print(' '.join(medicine))
@@ -43,11 +43,11 @@ def f_1mg(medicine):
 			WebDriverWait(driver, delay).until(EC.presence_of_element_located(
 				(By.CLASS_NAME, 'row.style__grid-container___3OfcL')
 			))
-			try :
-				driver.find_element_by_class_name('style__horizontal-card___1Zwmt')
-				print('found1\n')
-				boxes = driver.find_elements_by_class_name('style__horizontal-card___1Zwmt')
-				print(len(boxes))
+			# try :
+				# driver.find_element_by_class_name('style__horizontal-card___1Zwmt')
+				# print('found1\n')
+			boxes = driver.find_elements_by_class_name('style__horizontal-card___1Zwmt')
+			if len(boxes) > 0: 
 				for i, box in enumerate(boxes):
 					data_obj = {
 						'link': '#',
@@ -63,15 +63,16 @@ def f_1mg(medicine):
 					data_obj['price'] = box.find_element_by_class_name('style__price-tag___B2csA').text
 					# except : 
 					# 	data_obj['price'] = box.find_element_by_class_name('nFRb7').text 
-			
+					if data_obj['price'][0:3] == 'MRP' :
+						data_obj['price'] = data_obj['price'][3:]
+					data[i] = data_obj
 					data[i] = data_obj
 					print(i)
-			except:
-				try:
-					driver.find_element_by_class_name('style__product-box___3oEU6')
-					print('found2\n')
-					boxes = driver.find_elements_by_class_name('style__product-box___3oEU6')
-					print(len(boxes))
+			# except:
+			else :
+				# try:					
+				boxes = driver.find_elements_by_class_name('style__product-box___3oEU6')
+				if len(boxes) > 0 :
 					for i, box in enumerate(boxes):
 						data_obj = {
 							'link': '#',
@@ -87,15 +88,18 @@ def f_1mg(medicine):
 						data_obj['price'] = box.find_element_by_class_name('style__price-tag___KzOkY').text
 						# except : 
 						# 	data_obj['price'] = box.find_element_by_class_name('nFRb7').text 
-				
+						if data_obj['price'][0:3] == 'MRP' :
+							data_obj['price'] = data_obj['price'][3:]
 						data[i] = data_obj
 						print(i)
-				except:
+				# except:
+				else :
 					pass
 		except:
 			pass
 	except:
 		pass
+	# if(data[])
 	return data
 
 
@@ -112,23 +116,23 @@ def f_pharmeasy(medicine):
 	driver.get(URL)
 	delay = 4
 	# return data
-	try:
+	# try:
 		# # driver.find_element_by_xpath('//*[@id="content"]/div/div[2]/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/input')
 		# driver.find_element_by_class_name('jss34 _9Rsw_ undefined _2Saml')		
 		# driver.send_keys(' '.join(medicine))
 		# driver.send_keys(Keys.ENTER)
 		# driver.
-		print('searched\n')
-		# //*[@id="content"]/div/div[3]/div/div/div[1]/div[1]/div/div[1]/div/div
-		# //*[@id="content"]/div/div[3]/div/div/div[1]/div[1]/div/div[2]
-		print(driver.current_url)
-		try:
-			WebDriverWait(driver, delay).until(EC.presence_of_element_located(
-				(By.CLASS_NAME, '_3zq4I')
-			))
-			print('found\n')
-			boxes = driver.find_elements_by_class_name('_1jald')
-			print(len(boxes))
+	print('searched\n')
+	# //*[@id="content"]/div/div[3]/div/div/div[1]/div[1]/div/div[1]/div/div
+	# //*[@id="content"]/div/div[3]/div/div/div[1]/div[1]/div/div[2]
+	print(driver.current_url)
+	try:
+		WebDriverWait(driver, delay).until(EC.presence_of_element_located(
+			(By.CLASS_NAME, '_3zq4I')
+		))
+		print('found\n')
+		boxes = driver.find_elements_by_class_name('_1jald')
+		if len(boxes) > 0 :
 			for i, box in enumerate(boxes):
 				data_obj = {
 					'link': '#',
@@ -145,11 +149,12 @@ def f_pharmeasy(medicine):
 		
 				data[i] = data_obj
 				print(i)
-
-		except:
+		else :
 			pass
 	except:
 		pass
+	# except:
+	# 	pass
 	return data
 
 def f_apollo(medicine):

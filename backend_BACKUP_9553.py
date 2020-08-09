@@ -7,21 +7,21 @@ from selenium.webdriver.common.keys import Keys
 
 
 def get_img_src(medicine):
-# <<<<<<< HEAD
+<<<<<<< HEAD
 	driver = getDriver()
 	driver.get('https://images.google.com');
 	driver.find_element_by_xpath('//*[@id="sbtc"]/div/div[2]/input').send_keys(' '.join(medicine))
 	print(' '.join(medicine))
-# ||||||| merged common ancestors
+||||||| merged common ancestors
 	driver= getDriver()
 	driver.get('https://images.google.com');
 	driver.find_element_by_xpath('//*[@id="sbtc"]/div/div[2]/input').send_keys(' '.join(medicine))
 	print(' '.join(medicine))
-# =======
+=======
 	driver= getDriver()
 	driver.get('https://images.google.com')
 	driver.find_element_by_xpath('//*[@id="sbtc"]/div/div[2]/input').send_keys(medicine)
-# >>>>>>> 6437bad05642e369b922632138056f88198e391f
+>>>>>>> 6437bad05642e369b922632138056f88198e391f
 	driver.find_element_by_xpath('//*[@id="sbtc"]/div/div[2]/input').send_keys(Keys.ENTER)
 	src = driver.find_element_by_xpath('//*[@id="islrg"]/div[1]/div[1]/a[1]/div[1]/img').get_attribute('src')
 	return src

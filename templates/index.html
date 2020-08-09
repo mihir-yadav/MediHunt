@@ -12,8 +12,8 @@
   </head>
   <body>
     <h1 class="h1 p-3 text-primary">Welcome to MediHunt
-      {% if data %}
-    <img class = 'img-responsive rounded p-6 img-fluid img-thumbnail mx-auto float-right' src = {{data[1]}} alt = 'Medicine_Image' style = 'float:right'>
+      {% if src %}
+    <img class = 'img-responsive rounded p-6 img-fluid img-thumbnail mx-auto float-right' src = {{src}} alt = 'Medicine_Image' style = 'float:right'>
       {% endif %}
   </h1>
     <form action="{{ url_for('handle_data') }}" method='POST'>
@@ -26,15 +26,16 @@
           <option value="other" class="form-control">Other</option>
         </select>
         <div class="col-6">
+          {% if search %}
+            <input id="name" name="name" type="text" class="form-control border border-primary" placeholder="Medicine Name and Other Details" value="{{ search }}"/>
+          {% else %}
           <input id="name" name="name" type="text" class="form-control border border-primary" placeholder="Medicine Name and Other Details"/>
+          {% endif %}
         </div>
         <input type="submit" name = "hunt" value="Hunt!!" class="form-control w-auto btn btn-primary"/>
-
-
-
       </div>
     </form> 
-
+    
     {% if data %}
     <table class = "table table-bordered text-align-center" style = "text-align:center">
       <thead class = "thead-dark">
@@ -52,8 +53,8 @@
             1mg
           </th>
         </tr>
-      </thead>
-      {% for dataObj in data[0] %}
+      </thead>    
+      {% for dataObj in data%}
       <tr class="d-flex w-auto">
         <td class="col w-auto">
           <a href="{{ dataObj.apollo.link }}" target="_blank">
@@ -107,6 +108,7 @@
       {% endfor %}
     </table>
     {% endif %}
+    
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

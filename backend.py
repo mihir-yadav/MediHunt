@@ -4,26 +4,23 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from selenium.webdriver.common.keys import Keys
-import threading
+from threading import Thread
+from multiprocessing import Process
 import datetime
 from datetime import datetime
-global apollo,pharmeasy,netmeds,onemg
-global driver_apollo, driver_pharmeasy, driver_netmeds, driver_onemg, driver_src
-global img_src
-import multiprocessing
+ 
+apollo, pharmeasy, netmeds, onemg, src = [None] * 5
+driver_apollo, driver_pharmeasy, driver_netmeds, driver_onemg, driver_src = [None] * 5
 
 
 def get_img_src(medicine):
-	global driver_src,img_src
+	global src, driver_src
 	driver = driver_src
 	driver.get('https://images.google.com')
 	driver.find_element_by_xpath('//*[@id="sbtc"]/div/div[2]/input').send_keys(medicine)
 	driver.find_element_by_xpath('//*[@id="sbtc"]/div/div[2]/input').send_keys(Keys.ENTER)
 	src = driver.find_element_by_xpath('//*[@id="islrg"]/div[1]/div[1]/a[1]/div[1]/img').get_attribute('src')
 	driver_src.quit()
-	img_src = src
-	# return src
-
 
 def f_1mg(medicine):
 
@@ -124,7 +121,6 @@ def f_1mg(medicine):
 	onemg = data
 	driver.quit()
 	# return data
-
 
 def f_pharmeasy(medicine):
 	start_time_pharmeasy = datetime.now()
@@ -302,37 +298,50 @@ def f_netmeds(medicine):
 	# return data
 
 def compileData(medicine):
-	global apollo,pharmeasy,netmeds,onemg,img_src
+	global apollo, pharmeasy, netmeds, onemg, src
 	global driver_src, driver_netmeds, driver_pharmeasy, driver_onemg, driver_apollo
 
+	driver_src = getDriver()
 	driver_netmeds = getDriver()
 	driver_pharmeasy = getDriver()
 	driver_onemg = getDriver()
 	driver_apollo = getDriver()
-	driver_src = getDriver()
 
 	# print("Start time: ")
 	# print(datetime.datetime.now().time())
 	start_time = datetime.now()
 
-	thread_apollo = threading.Thread(target = f_apollo,args = (medicine,))
-	thread_pharmeasy = threading.Thread(target = f_pharmeasy,args = (medicine,))
-	thread_netmeds = threading.Thread(target = f_netmeds,args = (medicine,))
-	thread_onemg = threading.Thread(target = f_1mg,args = (medicine,))
-	thread_get_image = threading.Thread(target = get_img_src,args = (medicine,))
+	thread_apollo = Thread(target = f_apollo,args = (medicine,))
+	thread_pharmeasy = Thread(target = f_pharmeasy,args = (medicine,))
+	thread_netmeds = Thread(target = f_netmeds,args = (medicine,))
+	thread_onemg = Thread(target = f_1mg,args = (medicine,))
+	thread_src = Thread(target = get_img_src, args = (' '.join(medicine),))
+	
+	# thread_apollo = Process(target = f_apollo,args = (medicine,))
+	# thread_pharmeasy = Process(target = f_pharmeasy,args = (medicine,))
+	# thread_netmeds = Process(target = f_netmeds,args = (medicine,))
+	# thread_onemg = Process(target = f_1mg,args = (medicine,))
+	# thread_src = Process(target = get_img_src, args = (' '.join(medicine),))
 	
 	thread_apollo.start()
 	thread_pharmeasy.start()
 	thread_netmeds.start()
 	thread_onemg.start()
-	thread_get_image.start()
+	thread_src.start()
 
 	thread_apollo.join()
 	thread_pharmeasy.join()
 	thread_netmeds.join()
 	thread_onemg.join()
-	thread_get_image.join()
+	thread_src.join()
 
+
+	# f_apollo(medicine)
+	# f_pharmeasy(medicine)
+	# f_netmeds(medicine)
+	# f_1mg(medicine)
+	# print("End time: ")
+	# print(datetime.datetime.now().time())
 	end_time = datetime.now()
 	print('time taken: ',end= " ")
 	print(end_time - start_time)
@@ -345,29 +354,4 @@ def compileData(medicine):
 			'netmeds': netmeds[i],
 			'onemg': onemg[i]
 		}
-	return [data,img_src]
-
-
-
-	# thread_apollo = multiprocessing.Process(target = f_apollo,args = (medicine,))
-	# thread_pharmeasy = multiprocessing.Process(target = f_pharmeasy,args = (medicine,))
-	# thread_netmeds = multiprocessing.Process(target = f_netmeds,args = (medicine,))
-	# thread_onemg = multiprocessing.Process(target = f_1mg,args = (medicine,))
-	
-	# thread_apollo.start()
-	# thread_pharmeasy.start()
-	# thread_netmeds.start()
-	# thread_onemg.start()
-
-	# thread_apollo.join()
-	# thread_pharmeasy.join()
-	# thread_netmeds.join()
-	# thread_onemg.join()
-
-
-	# f_apollo(medicine)
-	# f_pharmeasy(medicine)
-	# f_netmeds(medicine)
-	# f_1mg(medicine)
-	# print("End time: ")
-	# print(datetime.datetime.now().time())	
+	return data, src

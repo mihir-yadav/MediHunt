@@ -28,9 +28,8 @@ def index(data = None):
 
 @app.route('/handle_data', methods = ['POST'])
 def handle_data():
-	data = backend.compileData([request.form['type'], request.form['name']])
+	data, src = backend.compileData([request.form['type'], request.form['name']])
 	searched_text = request.form['name']
-	src = backend.get_img_src(' '.join(request.form['name']))
 	return flask.render_template('index.html', data=data, src=src, search=searched_text)
 # >>>>>>> 6437bad05642e369b922632138056f88198e391f
 

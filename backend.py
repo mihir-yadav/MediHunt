@@ -4,6 +4,11 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from selenium.webdriver.common.keys import Keys
+import threading
+import datetime
+from datetime import datetime
+global apollo,pharmeasy,netmeds,onemg
+import multiprocessing
 
 
 def get_img_src(medicine):
@@ -17,6 +22,10 @@ def get_img_src(medicine):
 
 
 def f_1mg(medicine):
+
+	start_time_1mg = datetime.now()
+
+	global onemg
 	data = [
 		{
 			'link': '#',
@@ -28,6 +37,8 @@ def f_1mg(medicine):
 	driver = getDriver()
 	driver.get(URL)
 	delay = 4
+	driver_time_1mg= datetime.now()
+	print(driver.current_url)
 	# return data
 	try:
 		# # driver.find_element_by_xpath('//*[@id="content"]/div/div[2]/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/input')
@@ -38,7 +49,7 @@ def f_1mg(medicine):
 		print('searched\n')
 		# //*[@id="content"]/div/div[3]/div/div/div[1]/div[1]/div/div[1]/div/div
 		# //*[@id="content"]/div/div[3]/div/div/div[1]/div[1]/div/div[2]
-		print(driver.current_url)
+		
 		try:
 			WebDriverWait(driver, delay).until(EC.presence_of_element_located(
 				(By.CLASS_NAME, 'row.style__grid-container___3OfcL')
@@ -67,7 +78,7 @@ def f_1mg(medicine):
 						data_obj['price'] = data_obj['price'][3:]
 					data[i] = data_obj
 					data[i] = data_obj
-					print(i)
+					# print(i)
 			# except:
 			else :
 				# try:					
@@ -93,7 +104,7 @@ def f_1mg(medicine):
 						if data_obj['price'][0:3] == 'MRP' :
 							data_obj['price'] = data_obj['price'][3:]
 						data[i] = data_obj
-						print(i)
+						# print(i)
 				# except:
 				else :
 					pass
@@ -102,10 +113,17 @@ def f_1mg(medicine):
 	except:
 		pass
 	# if(data[])
-	return data
+	end_time_1mg = datetime.now()
+	print('1mg',end=" ")
+	print(start_time_1mg.time(),driver_time_1mg ,end_time_1mg.time())
+
+	onemg = data
+	# return data
 
 
 def f_pharmeasy(medicine):
+	start_time_pharmeasy = datetime.now()
+	global pharmeasy
 	data = [
 		{
 			'link': '#',
@@ -117,6 +135,8 @@ def f_pharmeasy(medicine):
 	driver = getDriver()
 	driver.get(URL)
 	delay = 4
+	driver_time_pharmeasy = datetime.now()
+	print(driver.current_url)
 	# return data
 	# try:
 		# # driver.find_element_by_xpath('//*[@id="content"]/div/div[2]/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/div/div[2]/input')
@@ -124,15 +144,15 @@ def f_pharmeasy(medicine):
 		# driver.send_keys(' '.join(medicine))
 		# driver.send_keys(Keys.ENTER)
 		# driver.
-	print('searched\n')
+	# print('searched\n')
 	# //*[@id="content"]/div/div[3]/div/div/div[1]/div[1]/div/div[1]/div/div
 	# //*[@id="content"]/div/div[3]/div/div/div[1]/div[1]/div/div[2]
-	print(driver.current_url)
+	
 	try:
 		WebDriverWait(driver, delay).until(EC.presence_of_element_located(
 			(By.CLASS_NAME, '_3zq4I')
 		))
-		print('found\n')
+		# print('found\n')
 		boxes = driver.find_elements_by_class_name('_1jald')
 		if len(boxes) > 0 :
 			for i, box in enumerate(boxes):
@@ -150,21 +170,30 @@ def f_pharmeasy(medicine):
 					data_obj['price'] = box.find_element_by_class_name('nFRb7').text 
 		
 				data[i] = data_obj
-				print(i)
+				# print(i)
 		else :
 			pass
 	except:
 		pass
 	# except:
 	# 	pass
-	return data
+
+	end_time_pharmeasy = datetime.now()
+	print('Pharmeasy',end=" ")
+	print(start_time_pharmeasy.time(),driver_time_pharmeasy, end_time_pharmeasy.time())
+	pharmeasy = data
+	# return data
 
 def f_apollo(medicine):
-	pass
+	start_time_apollo = datetime.now()
+	global apollo
+	# pass
 	URL = "https://www.apollopharmacy.in/"
 	driver = getDriver()
 	driver.get(URL)
 	delay = 4
+	driver_time_apollo = datetime.now()
+	print(driver.current_url)
 
 	data = [
 		{
@@ -173,6 +202,7 @@ def f_apollo(medicine):
 			'price': ''
 		}
 	] * 5
+
 	# return data
 	try:
 		driver.find_element_by_id('search').send_keys(' '.join(medicine))
@@ -201,14 +231,22 @@ def f_apollo(medicine):
 			pass
 	except:
 		pass
-	
-	return data
+
+	end_time_apollo = datetime.now()
+	print('Apollo',end=" ")
+	print(start_time_apollo.time(),driver_time_apollo ,end_time_apollo.time())
+	apollo = data
+	# return data
 
 def f_netmeds(medicine):
+	start_time_netmeds = datetime.now()
+	global netmeds
 	URL = "https://www.netmeds.com/"
 	driver = getDriver()
 	driver.get(URL)
 	delay = 4
+	driver_time_netmeds= datetime.now()
+	print(driver.current_url)
 
 	data = [
 		{
@@ -245,14 +283,60 @@ def f_netmeds(medicine):
 	except:
 		pass
 	
-	print(data)
-	return data
+	end_time_netmeds = datetime.now()
+	print('Netmeds',end=" ")
+	print(start_time_netmeds.time(),driver_time_netmeds ,end_time_netmeds.time())
+	# print(data)
+	netmeds = data
+	# return data
 
 def compileData(medicine):
-	apollo = f_apollo(medicine)
-	pharmeasy = f_pharmeasy(medicine)
-	netmeds = f_netmeds(medicine)
-	onemg = f_1mg(medicine)
+	global apollo,pharmeasy,netmeds,onemg
+
+	# print("Start time: ")
+	# print(datetime.datetime.now().time())
+	start_time = datetime.now()
+
+	thread_apollo = threading.Thread(target = f_apollo,args = (medicine,))
+	thread_pharmeasy = threading.Thread(target = f_pharmeasy,args = (medicine,))
+	thread_netmeds = threading.Thread(target = f_netmeds,args = (medicine,))
+	thread_onemg = threading.Thread(target = f_1mg,args = (medicine,))
+	
+	thread_apollo.start()
+	thread_pharmeasy.start()
+	thread_netmeds.start()
+	thread_onemg.start()
+
+	thread_apollo.join()
+	thread_pharmeasy.join()
+	thread_netmeds.join()
+	thread_onemg.join()
+
+	# thread_apollo = multiprocessing.Process(target = f_apollo,args = (medicine,))
+	# thread_pharmeasy = multiprocessing.Process(target = f_pharmeasy,args = (medicine,))
+	# thread_netmeds = multiprocessing.Process(target = f_netmeds,args = (medicine,))
+	# thread_onemg = multiprocessing.Process(target = f_1mg,args = (medicine,))
+	
+	# thread_apollo.start()
+	# thread_pharmeasy.start()
+	# thread_netmeds.start()
+	# thread_onemg.start()
+
+	# thread_apollo.join()
+	# thread_pharmeasy.join()
+	# thread_netmeds.join()
+	# thread_onemg.join()
+
+
+	# f_apollo(medicine)
+	# f_pharmeasy(medicine)
+	# f_netmeds(medicine)
+	# f_1mg(medicine)
+	# print("End time: ")
+	# print(datetime.datetime.now().time())
+	end_time = datetime.now()
+	print('time taken: ',end= " ")
+	print(end_time - start_time)
 
 	data = [0] * 5
 	for i in range(5):

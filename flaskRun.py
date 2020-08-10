@@ -5,7 +5,6 @@ from selenium import webdriver
 import backend
 app = Flask(__name__)
 
-driver = None 
 ANKUR_WEBDRIVER = "/Users/ankuringale/Desktop/chromedriver"
 MIHIR_WEBDRIVER = "/home/mihir/bin/chromedriver"
 
@@ -29,7 +28,6 @@ def index(data = None):
 
 @app.route('/handle_data', methods = ['POST'])
 def handle_data():
-	global driver
 	data = backend.compileData([request.form['type'], request.form['name']])
 	searched_text = request.form['name']
 	src = backend.get_img_src(' '.join(request.form['name']))
@@ -37,25 +35,12 @@ def handle_data():
 # >>>>>>> 6437bad05642e369b922632138056f88198e391f
 
 def getDriver():
-	global driver
-	if not driver:
-		initDriver()
-	assert driver is not None
-	return driver
-
-def quitDriver():
-	global driver
-	if driver:
-		driver.quit()
-		driver = None
-
-def initDriver():
-	global driver
 	options = webdriver.ChromeOptions()
 	options.add_argument('--ignore-certificate-errors')
 	options.add_argument('--incognito')
 	options.add_argument('--headless')
-	driver = webdriver.Chrome(MIHIR_WEBDRIVER, chrome_options=options)
+	driver = webdriver.Chrome(ANKUR_WEBDRIVER, chrome_options=options)
+	return driver
 
 if __name__ == '__main__':
 	app.debug=True

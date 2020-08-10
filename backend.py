@@ -1,4 +1,4 @@
-from flaskRun import getDriver, quitDriver
+from flaskRun import getDriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
@@ -8,24 +8,27 @@ import threading
 import datetime
 from datetime import datetime
 global apollo,pharmeasy,netmeds,onemg
+global driver_apollo, driver_pharmeasy, driver_netmeds, driver_onemg, driver_src
 import multiprocessing
 
 
 def get_img_src(medicine):
-
-	driver= getDriver()
+	global driver_src
+	driver = driver_src
 	driver.get('https://images.google.com')
 	driver.find_element_by_xpath('//*[@id="sbtc"]/div/div[2]/input').send_keys(medicine)
 	driver.find_element_by_xpath('//*[@id="sbtc"]/div/div[2]/input').send_keys(Keys.ENTER)
 	src = driver.find_element_by_xpath('//*[@id="islrg"]/div[1]/div[1]/a[1]/div[1]/img').get_attribute('src')
+	driver_src.quit()
 	return src
 
 
 def f_1mg(medicine):
 
 	start_time_1mg = datetime.now()
+	global onemg, driver_onemg
 
-	global onemg
+	driver = driver_onemg
 	data = [
 		{
 			'link': '#',
@@ -34,7 +37,6 @@ def f_1mg(medicine):
 		}
 	] * 5
 	URL = "https://www.1mg.com/search/all?name=" + '%20'.join(medicine)
-	driver = getDriver()
 	driver.get(URL)
 	delay = 4
 	driver_time_1mg= datetime.now()
@@ -118,12 +120,15 @@ def f_1mg(medicine):
 	print(start_time_1mg.time(),driver_time_1mg ,end_time_1mg.time())
 
 	onemg = data
+	driver.quit()
 	# return data
 
 
 def f_pharmeasy(medicine):
 	start_time_pharmeasy = datetime.now()
-	global pharmeasy
+	global pharmeasy, driver_pharmeasy
+
+	driver = driver_pharmeasy
 	data = [
 		{
 			'link': '#',
@@ -132,7 +137,6 @@ def f_pharmeasy(medicine):
 		}
 	] * 5
 	URL = "https://pharmeasy.in/search/all?name=" + '+'.join(medicine)
-	driver = getDriver()
 	driver.get(URL)
 	delay = 4
 	driver_time_pharmeasy = datetime.now()
@@ -182,14 +186,16 @@ def f_pharmeasy(medicine):
 	print('Pharmeasy',end=" ")
 	print(start_time_pharmeasy.time(),driver_time_pharmeasy, end_time_pharmeasy.time())
 	pharmeasy = data
+	driver.quit()
 	# return data
 
 def f_apollo(medicine):
 	start_time_apollo = datetime.now()
-	global apollo
+	global apollo, driver_apollo
+
+	driver = driver_apollo
 	# pass
 	URL = "https://www.apollopharmacy.in/"
-	driver = getDriver()
 	driver.get(URL)
 	delay = 4
 	driver_time_apollo = datetime.now()
@@ -236,13 +242,15 @@ def f_apollo(medicine):
 	print('Apollo',end=" ")
 	print(start_time_apollo.time(),driver_time_apollo ,end_time_apollo.time())
 	apollo = data
+	driver.quit()
 	# return data
 
 def f_netmeds(medicine):
 	start_time_netmeds = datetime.now()
-	global netmeds
+	global netmeds, driver_netmeds
+
+	driver = driver_netmeds
 	URL = "https://www.netmeds.com/"
-	driver = getDriver()
 	driver.get(URL)
 	delay = 4
 	driver_time_netmeds= datetime.now()
@@ -288,10 +296,18 @@ def f_netmeds(medicine):
 	print(start_time_netmeds.time(),driver_time_netmeds ,end_time_netmeds.time())
 	# print(data)
 	netmeds = data
+	driver.quit()
 	# return data
 
 def compileData(medicine):
 	global apollo,pharmeasy,netmeds,onemg
+	global driver_src, driver_netmeds, driver_pharmeasy, driver_onemg, driver_apollo
+
+	driver_src = getDriver()
+	driver_netmeds = getDriver()
+	driver_pharmeasy = getDriver()
+	driver_onemg = getDriver()
+	driver_apollo = getDriver()
 
 	# print("Start time: ")
 	# print(datetime.datetime.now().time())
@@ -346,5 +362,4 @@ def compileData(medicine):
 			'netmeds': netmeds[i],
 			'onemg': onemg[i]
 		}
-	quitDriver()
 	return data

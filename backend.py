@@ -5,13 +5,12 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from selenium.webdriver.common.keys import Keys
 from threading import Thread
-from multiprocessing import Process
+from multiprocessing import Process, Pool
 import datetime
 from datetime import datetime
  
 apollo, pharmeasy, netmeds, onemg, src = [None] * 5
 driver_apollo, driver_pharmeasy, driver_netmeds, driver_onemg, driver_src = [None] * 5
-
 
 def get_img_src(medicine):
 	global src, driver_src
@@ -240,6 +239,7 @@ def f_apollo(medicine):
 	print('Apollo',end=" ")
 	print(start_time_apollo.time(),driver_time_apollo ,end_time_apollo.time())
 	apollo = data
+	print('Apollo', apollo)
 	driver.quit()
 	# return data
 
@@ -322,6 +322,16 @@ def compileData(medicine):
 	# thread_netmeds = Process(target = f_netmeds,args = (medicine,))
 	# thread_onemg = Process(target = f_1mg,args = (medicine,))
 	# thread_src = Process(target = get_img_src, args = (' '.join(medicine),))
+
+	# pool = Pool(5)
+	# thread_onemg = pool.apply_async(f_1mg, (medicine, ))
+	# thread_apollo = pool.apply_async(f_apollo, (medicine, ))
+	# thread_pharmeasy = pool.apply_async(f_pharmeasy, (medicine, ))
+	# thread_netmeds = pool.apply_async(f_netmeds, (medicine, ))
+	# thread_src = pool.apply_async(get_img_src, (' '.join(medicine), ))
+
+	# pool.close()
+	# pool.join()
 	
 	thread_apollo.start()
 	thread_pharmeasy.start()
@@ -345,6 +355,8 @@ def compileData(medicine):
 	end_time = datetime.now()
 	print('time taken: ',end= " ")
 	print(end_time - start_time)
+
+	print(apollo, pharmeasy)
 
 	data = [0] * 5
 	for i in range(5):

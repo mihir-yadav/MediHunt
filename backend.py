@@ -9,18 +9,20 @@ import datetime
 from datetime import datetime
 global apollo,pharmeasy,netmeds,onemg
 global driver_apollo, driver_pharmeasy, driver_netmeds, driver_onemg, driver_src
+global img_src
 import multiprocessing
 
 
 def get_img_src(medicine):
-	global driver_src
+	global driver_src,img_src
 	driver = driver_src
 	driver.get('https://images.google.com')
 	driver.find_element_by_xpath('//*[@id="sbtc"]/div/div[2]/input').send_keys(medicine)
 	driver.find_element_by_xpath('//*[@id="sbtc"]/div/div[2]/input').send_keys(Keys.ENTER)
 	src = driver.find_element_by_xpath('//*[@id="islrg"]/div[1]/div[1]/a[1]/div[1]/img').get_attribute('src')
 	driver_src.quit()
-	return src
+	img_src = src
+	# return src
 
 
 def f_1mg(medicine):
@@ -300,14 +302,14 @@ def f_netmeds(medicine):
 	# return data
 
 def compileData(medicine):
-	global apollo,pharmeasy,netmeds,onemg
+	global apollo,pharmeasy,netmeds,onemg,img_src
 	global driver_src, driver_netmeds, driver_pharmeasy, driver_onemg, driver_apollo
 
-	driver_src = getDriver()
 	driver_netmeds = getDriver()
 	driver_pharmeasy = getDriver()
 	driver_onemg = getDriver()
 	driver_apollo = getDriver()
+	driver_src = getDriver()
 
 	# print("Start time: ")
 	# print(datetime.datetime.now().time())
@@ -317,16 +319,35 @@ def compileData(medicine):
 	thread_pharmeasy = threading.Thread(target = f_pharmeasy,args = (medicine,))
 	thread_netmeds = threading.Thread(target = f_netmeds,args = (medicine,))
 	thread_onemg = threading.Thread(target = f_1mg,args = (medicine,))
+	thread_get_image = threading.Thread(target = get_img_src,args = (medicine,))
 	
 	thread_apollo.start()
 	thread_pharmeasy.start()
 	thread_netmeds.start()
 	thread_onemg.start()
+	thread_get_image.start()
 
 	thread_apollo.join()
 	thread_pharmeasy.join()
 	thread_netmeds.join()
 	thread_onemg.join()
+	thread_get_image.join()
+
+	end_time = datetime.now()
+	print('time taken: ',end= " ")
+	print(end_time - start_time)
+
+	data = [0] * 5
+	for i in range(5):
+		data[i] = {
+			'apollo': apollo[i],
+			'pharmeasy': pharmeasy[i],
+			'netmeds': netmeds[i],
+			'onemg': onemg[i]
+		}
+	return [data,img_src]
+
+
 
 	# thread_apollo = multiprocessing.Process(target = f_apollo,args = (medicine,))
 	# thread_pharmeasy = multiprocessing.Process(target = f_pharmeasy,args = (medicine,))
@@ -349,17 +370,4 @@ def compileData(medicine):
 	# f_netmeds(medicine)
 	# f_1mg(medicine)
 	# print("End time: ")
-	# print(datetime.datetime.now().time())
-	end_time = datetime.now()
-	print('time taken: ',end= " ")
-	print(end_time - start_time)
-
-	data = [0] * 5
-	for i in range(5):
-		data[i] = {
-			'apollo': apollo[i],
-			'pharmeasy': pharmeasy[i],
-			'netmeds': netmeds[i],
-			'onemg': onemg[i]
-		}
-	return data
+	# print(datetime.datetime.now().time())	

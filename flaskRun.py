@@ -37,7 +37,7 @@ def getDriver():
 	options.add_argument('--ignore-certificate-errors')
 	options.add_argument('--incognito')
 	options.add_argument('--headless')
-	driver = webdriver.Chrome(ANKUR_WEBDRIVER, chrome_options=options)
+	driver = webdriver.Chrome(MIHIR_WEBDRIVER, chrome_options=options)
 	return driver
 
 if __name__ == '__main__':

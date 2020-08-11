@@ -12,9 +12,10 @@ from datetime import datetime
 apollo, pharmeasy, netmeds, onemg, src = [None] * 5
 driver_apollo, driver_pharmeasy, driver_netmeds, driver_onemg, driver_src = [None] * 5
 
-def get_img_src(medicine):
+def get_img_src(medicine_with_type):
 	global src, driver_src
 	driver = driver_src
+	medicine = ' '.join(medicine_with_type)
 	driver.get('https://images.google.com')
 	driver.find_element_by_xpath('//*[@id="sbtc"]/div/div[2]/input').send_keys(medicine)
 	driver.find_element_by_xpath('//*[@id="sbtc"]/div/div[2]/input').send_keys(Keys.ENTER)
@@ -47,7 +48,7 @@ def f_1mg(medicine):
 		# driver.send_keys(' '.join(medicine))
 		# driver.send_keys(Keys.ENTER)
 		# driver.
-		print('searched\n')
+		# print('searched\n')
 		# //*[@id="content"]/div/div[3]/div/div/div[1]/div[1]/div/div[1]/div/div
 		# //*[@id="content"]/div/div[3]/div/div/div[1]/div[1]/div/div[2]
 		
@@ -327,12 +328,12 @@ def compileData(medicine):
 	# thread_onemg = Process(target = f_1mg,args = (medicine,))
 	# thread_src = Process(target = get_img_src, args = (' '.join(medicine),))
 
-	pool = Pool(5)
+	pool = Pool(4)
 	thread_onemg = pool.apply_async(f_1mg, (medicine, ))
 	thread_apollo = pool.apply_async(f_apollo, (medicine, ))
 	thread_pharmeasy = pool.apply_async(f_pharmeasy, (medicine, ))
 	thread_netmeds = pool.apply_async(f_netmeds, (medicine, ))
-	thread_src = pool.apply_async(get_img_src, (' '.join(medicine), ))
+	# thread_src = pool.apply_async(get_img_src, (medicine, ))
 
 	pool.close()
 	pool.join()
@@ -341,7 +342,9 @@ def compileData(medicine):
 	pharmeasy = thread_pharmeasy.get(10)
 	onemg = thread_onemg.get(10)
 	netmeds = thread_netmeds.get(10)
-	src = thread_src.get(10)
+
+	src = get_img_src(medicine)
+	# src = thread_src.get(10)
 	
 	# thread_apollo.start()
 	# thread_pharmeasy.start()

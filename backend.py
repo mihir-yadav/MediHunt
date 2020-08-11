@@ -5,13 +5,12 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from selenium.webdriver.common.keys import Keys
 from threading import Thread
-from multiprocessing import Process
+from multiprocessing import Process, Pool
 import datetime
 from datetime import datetime
  
 apollo, pharmeasy, netmeds, onemg, src = [None] * 5
 driver_apollo, driver_pharmeasy, driver_netmeds, driver_onemg, driver_src = [None] * 5
-
 
 def get_img_src(medicine):
 	global src, driver_src
@@ -21,6 +20,7 @@ def get_img_src(medicine):
 	driver.find_element_by_xpath('//*[@id="sbtc"]/div/div[2]/input').send_keys(Keys.ENTER)
 	src = driver.find_element_by_xpath('//*[@id="islrg"]/div[1]/div[1]/a[1]/div[1]/img').get_attribute('src')
 	driver_src.quit()
+	return src
 
 def f_1mg(medicine):
 
@@ -120,6 +120,7 @@ def f_1mg(medicine):
 
 	onemg = data
 	driver.quit()
+	return onemg
 	# return data
 
 def f_pharmeasy(medicine):
@@ -185,6 +186,7 @@ def f_pharmeasy(medicine):
 	print(start_time_pharmeasy.time(),driver_time_pharmeasy, end_time_pharmeasy.time())
 	pharmeasy = data
 	driver.quit()
+	return pharmeasy
 	# return data
 
 def f_apollo(medicine):
@@ -241,6 +243,7 @@ def f_apollo(medicine):
 	print(start_time_apollo.time(),driver_time_apollo ,end_time_apollo.time())
 	apollo = data
 	driver.quit()
+	return apollo
 	# return data
 
 def f_netmeds(medicine):
@@ -295,6 +298,7 @@ def f_netmeds(medicine):
 	# print(data)
 	netmeds = data
 	driver.quit()
+	return netmeds
 	# return data
 
 def compileData(medicine):
@@ -311,29 +315,45 @@ def compileData(medicine):
 	# print(datetime.datetime.now().time())
 	start_time = datetime.now()
 
-	thread_apollo = Thread(target = f_apollo,args = (medicine,))
-	thread_pharmeasy = Thread(target = f_pharmeasy,args = (medicine,))
-	thread_netmeds = Thread(target = f_netmeds,args = (medicine,))
-	thread_onemg = Thread(target = f_1mg,args = (medicine,))
-	thread_src = Thread(target = get_img_src, args = (' '.join(medicine),))
+	# thread_apollo = Thread(target = f_apollo,args = (medicine,))
+	# thread_pharmeasy = Thread(target = f_pharmeasy,args = (medicine,))
+	# thread_netmeds = Thread(target = f_netmeds,args = (medicine,))
+	# thread_onemg = Thread(target = f_1mg,args = (medicine,))
+	# thread_src = Thread(target = get_img_src, args = (' '.join(medicine),))
 	
 	# thread_apollo = Process(target = f_apollo,args = (medicine,))
 	# thread_pharmeasy = Process(target = f_pharmeasy,args = (medicine,))
 	# thread_netmeds = Process(target = f_netmeds,args = (medicine,))
 	# thread_onemg = Process(target = f_1mg,args = (medicine,))
 	# thread_src = Process(target = get_img_src, args = (' '.join(medicine),))
-	
-	thread_apollo.start()
-	thread_pharmeasy.start()
-	thread_netmeds.start()
-	thread_onemg.start()
-	thread_src.start()
 
-	thread_apollo.join()
-	thread_pharmeasy.join()
-	thread_netmeds.join()
-	thread_onemg.join()
-	thread_src.join()
+	pool = Pool(5)
+	thread_onemg = pool.apply_async(f_1mg, (medicine, ))
+	thread_apollo = pool.apply_async(f_apollo, (medicine, ))
+	thread_pharmeasy = pool.apply_async(f_pharmeasy, (medicine, ))
+	thread_netmeds = pool.apply_async(f_netmeds, (medicine, ))
+	thread_src = pool.apply_async(get_img_src, (' '.join(medicine), ))
+
+	pool.close()
+	pool.join()
+
+	apollo = thread_apollo.get(10)
+	pharmeasy = thread_pharmeasy.get(10)
+	onemg = thread_onemg.get(10)
+	netmeds = thread_netmeds.get(10)
+	src = thread_src.get(10)
+	
+	# thread_apollo.start()
+	# thread_pharmeasy.start()
+	# thread_netmeds.start()
+	# thread_onemg.start()
+	# thread_src.start()
+
+	# thread_apollo.join()
+	# thread_pharmeasy.join()
+	# thread_netmeds.join()
+	# thread_onemg.join()
+	# thread_src.join()
 
 
 	# f_apollo(medicine)

@@ -31,7 +31,6 @@ def handle_data():
 	data, src = backend.compileData([request.form['type'], request.form['name']])
 	searched_text = request.form['name']
 	return flask.render_template('index.html', data=data, src=src, search=searched_text)
-# >>>>>>> 6437bad05642e369b922632138056f88198e391f
 
 def getDriver():
 	options = webdriver.ChromeOptions()

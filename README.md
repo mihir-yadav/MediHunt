@@ -1,4 +1,4 @@
-# MediHunt
+# MediHunt- One stop solution for all your medical needs
 Search medicines you need and get results from top 4 indian pharmacies.
 
 To install:

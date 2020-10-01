@@ -5,7 +5,7 @@ To install:
 ```
 $ pip install flask  
 $ pip install selenium  
-$ git clone "https://github.com/mihir-yadav/Medi_Hunt"  
+$ git clone "https://github.com/mihir-yadav/MediHunt"  
 $ python3 flaskRun.py  
 ```
 ![Image of Website](https://github.com/mihir-yadav/Medi_Hunt/blob/master/Demo/MediHunt_demo.png?raw=true)
